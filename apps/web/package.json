@@ -16,8 +16,8 @@
     "@electron-template/sdk": "workspace:*",
     "@electron-template/ui": "workspace:*",
     "@fontsource-variable/geist": "^5.2.9",
-    "@orpc/client": "^1.14.3",
-    "@orpc/server": "^1.14.3",
+    "@orpc/client": "catalog:",
+    "@orpc/server": "catalog:",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-devtools": "^0.10.0",
     "@tanstack/react-router": "^1.167.4",
@@ -50,9 +50,9 @@
     "jsdom": "^29.0.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "typescript": "^6.0.3",
+    "typescript": "catalog:",
     "vite": "^8.0.0",
-    "vitest": "^4.0.0",
+    "vitest": "catalog:",
     "web-vitals": "^5.1.0"
   }
 }

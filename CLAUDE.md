@@ -127,6 +127,21 @@ The desktop app renderer dev server and IPC communication use `127.0.0.1` (not `
 This is intentional: some networks block localhost resolution, causing ERR_CONNECTION_TIMED_OUT.
 Using the explicit IP avoids this issue.
 
+## pnpm Conventions
+
+- Workspace target via `--filter`: `pnpm --filter <pkg> <script>` (preferred for single-package work).
+- Workspace-wide via three-dot selector: `pnpm --filter "./packages/*"... <script>` (topological order, equivalent to `pnpm -r`).
+- Workspace-wide dep versions are centralized in `pnpm-workspace.yaml` under
+  `catalog:`. The catalog currently pins four deps used in ≥3 workspaces:
+  `@orpc/server`, `@orpc/client`, `typescript`, `vitest`.
+- `catalogMode: strict` is declared but pnpm 9.15.0 silently ignores it
+  (the setting was added in pnpm 10.12.1). It will activate on the next
+  pnpm upgrade PR.
+- To add a dep that's already in the catalog: reference it as `"<name>": "catalog:"`
+  in the workspace `package.json`. To add a dep NOT yet in the catalog: first add
+  it under `catalog:` in `pnpm-workspace.yaml` (or run `pnpm add --save-catalog <name>`),
+  then reference it as `"<name>": "catalog:"` in the workspace `package.json`.
+
 ## Issue Labels
 
 GitHub issues use a structured label taxonomy:
