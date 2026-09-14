@@ -128,6 +128,12 @@ Each exposes `build`, `typecheck`, `lint`, and (where applicable) `test`. The `p
 
 If you later add a remote service or secret, add a Zod-validated loader in `packages/api` and document it here. Don't reach for `process.env` directly.
 
+## Workspace Internals
+
+The four internal packages (`@electron-template/api`, `@electron-template/db`, `@electron-template/sdk`, `@electron-template/ui`) are versioned with the `workspace:*` protocol. pnpm resolves these to symlinks pointing at the current source in this repo, so cross-package edits take effect immediately on the next import. At publish time pnpm rewrites them to concrete semver — the `workspace:*` references never leak into a published artifact.
+
+`pnpm install --frozen-lockfile` is mandatory in CI; any lockfile drift fails the build.
+
 ## Project Structure
 
 ```
