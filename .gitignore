@@ -44,3 +44,7 @@ temp/
 # Documentation
 # Internal docs are not tracked in the repo; keep them local or in a separate docs repo.
 docs/
+
+# npm lockfiles (project uses pnpm only)
+package-lock.json
+apps/web/package-lock.json

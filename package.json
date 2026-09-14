@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:desktop": "npm run dev -w apps/desktop",
-    "build:web": "npm run build -w apps/web",
-    "build:desktop": "npm run build -w apps/desktop",
+    "dev:desktop": "pnpm --filter desktop dev",
+    "build:web": "pnpm --filter web build",
+    "build:desktop": "pnpm --filter desktop build",
     "setup": "tsx scripts/setup.ts",
     "clean": "tsx scripts/clean.ts",
     "reset:db": "tsx scripts/reset-db.ts",
@@ -18,7 +18,7 @@
     "outdated:strict": "tsx scripts/outdated.ts --strict",
     "typecheck:scripts": "tsc -p tsconfig.scripts.json",
     "ui:add": "cd packages/ui && npx shadcn@4.7.0 add",
-    "postinstall": "node node_modules/electron/install.js && pnpm --filter \"./packages/*\" -r build"
+    "postinstall": "node node_modules/electron/install.js && pnpm --filter \"./packages/*\"... build"
   },
   "devDependencies": {
     "@electron/rebuild": "^4.0.4",
@@ -27,6 +27,13 @@
   },
   "engines": {
     "node": ">=22.13.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "22.13.0",
+      "onFail": "error"
+    }
   },
   "packageManager": "pnpm@9.15.0",
   "dependencies": {

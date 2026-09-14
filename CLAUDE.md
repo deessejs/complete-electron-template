@@ -115,7 +115,7 @@ both human and AI agents reviewing failure output.
 ### Build & CI
 | Tech | Version |
 |------|---------|
-| pnpm | 9 (CI) |
+| pnpm | 9.15.0 |
 | Vite | 7.3.1 |
 | TypeScript | 6.0.3 |
 | ESLint | 10.4.0 |
@@ -126,6 +126,26 @@ both human and AI agents reviewing failure output.
 The desktop app renderer dev server and IPC communication use `127.0.0.1` (not `localhost`).
 This is intentional: some networks block localhost resolution, causing ERR_CONNECTION_TIMED_OUT.
 Using the explicit IP avoids this issue.
+
+## pnpm Conventions
+
+- Workspace target via `--filter`: `pnpm --filter <pkg> <script>` (preferred for single-package work).
+- Workspace-wide via three-dot selector: `pnpm --filter "./packages/*"... <script>` (topological order, equivalent to `pnpm -r`).
+- CI installs use `pnpm install --frozen-lockfile --prefer-offline`. `--frozen-lockfile` is mandatory — CI fails loudly on any lockfile drift. `--prefer-offline` skips the network when the local store already has the packages.
+- `postinstall` runs `node node_modules/electron/install.js` followed by a topological build of all `packages/*`, so apps can consume fresh `dist/` outputs on every install.
+- Do not commit `package-lock.json` anywhere in the tree. The project is pnpm-only; npm lockfiles will be deleted on sight.
+- `devEngines.runtime` requires Node exactly `22.13.0`; mismatches fail `pnpm install` with an error. `engines.node` keeps the `>=22.13.0` public floor for tooling that reads only `engines`.
+- The `agent/` workspace is included in `pnpm-workspace.yaml` but **not** in the root `package.json#workspaces` field. That's intentional.
+- Workspace-wide dep versions are centralized in `pnpm-workspace.yaml` under
+  `catalog:`. The catalog currently pins four deps used in ≥3 workspaces:
+  `@orpc/server`, `@orpc/client`, `typescript`, `vitest`.
+- `catalogMode: strict` is declared but pnpm 9.15.0 silently ignores it
+  (the setting was added in pnpm 10.12.1). It will activate on the next
+  pnpm upgrade PR.
+- To add a dep that's already in the catalog: reference it as `"<name>": "catalog:"`
+  in the workspace `package.json`. To add a dep NOT yet in the catalog: first add
+  it under `catalog:` in `pnpm-workspace.yaml` (or run `pnpm add --save-catalog <name>`),
+  then reference it as `"<name>": "catalog:"` in the workspace `package.json`.
 
 ## Issue Labels
 
