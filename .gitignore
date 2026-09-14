@@ -45,3 +45,7 @@ temp/
 # CodeGraph
 .codegraph/.claude/pr-body-f2-settings.md
 .claude/pr-body-*.md
+
+# Documentation
+# Internal docs are not tracked in the repo; keep them local or in a separate docs repo.
+docs/
