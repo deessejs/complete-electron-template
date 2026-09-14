@@ -5,6 +5,23 @@ packages:
 
 nodeLinker: isolated
 
+# Workspace-wide dependency catalog. Every dependency referenced via
+# `catalog:` in a workspace package.json resolves to the version pinned here.
+# Adding a dep that's already in the catalog MUST use `catalog:`.
+# Adding a dep that's NOT in the catalog requires first adding an entry here
+# (or `pnpm add --save-catalog <name>`) and then referencing it as `catalog:`.
+catalog:
+  '@orpc/server': ^1.14.3
+  '@orpc/client': ^1.14.3
+  typescript: ^6.0.3
+  vitest: ^4.0.0
+
+# Forward-declared: `catalogMode` was introduced in pnpm 10.12.1. pnpm 9.15.0
+# (the current version) silently ignores this setting. It will activate
+# automatically when the team upgrades pnpm to >=10.12.1 — track that upgrade
+# as a separate PR. Until then, "strict" is intent, not enforcement.
+catalogMode: strict
+
 onlyBuiltDependencies:
   - better-sqlite3
   - esbuild

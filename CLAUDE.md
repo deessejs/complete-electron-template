@@ -136,6 +136,16 @@ Using the explicit IP avoids this issue.
 - Do not commit `package-lock.json` anywhere in the tree. The project is pnpm-only; npm lockfiles will be deleted on sight.
 - `devEngines.runtime` requires Node exactly `22.13.0`; mismatches fail `pnpm install` with an error. `engines.node` keeps the `>=22.13.0` public floor for tooling that reads only `engines`.
 - The `agent/` workspace is included in `pnpm-workspace.yaml` but **not** in the root `package.json#workspaces` field. That's intentional.
+- Workspace-wide dep versions are centralized in `pnpm-workspace.yaml` under
+  `catalog:`. The catalog currently pins four deps used in ≥3 workspaces:
+  `@orpc/server`, `@orpc/client`, `typescript`, `vitest`.
+- `catalogMode: strict` is declared but pnpm 9.15.0 silently ignores it
+  (the setting was added in pnpm 10.12.1). It will activate on the next
+  pnpm upgrade PR.
+- To add a dep that's already in the catalog: reference it as `"<name>": "catalog:"`
+  in the workspace `package.json`. To add a dep NOT yet in the catalog: first add
+  it under `catalog:` in `pnpm-workspace.yaml` (or run `pnpm add --save-catalog <name>`),
+  then reference it as `"<name>": "catalog:"` in the workspace `package.json`.
 
 ## Issue Labels
 
