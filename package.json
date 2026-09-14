@@ -1,5 +1,5 @@
 {
-  "name": "@electron-template/agent",
+  "name": "@electron-template/root",
   "private": true,
   "type": "module",
   "workspaces": [

@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-When shadcn is extracted into `packages/ui` (workspace package), the theme was not reaching the renderer in dev. Root cause + fix landed 2026-06-22, documented at `docs/plans/template-audit-remediation.md` section M6.
+When shadcn is extracted into `packages/ui` (workspace package), the theme was not reaching the renderer in dev. Root cause + fix landed 2026-06-22 (see [[project-template-audit-2026-06-22]] finding M6).
 
 **Why:** The original setup pointed `"./styles/globals.css": "./dist/styles/globals.css"` in `packages/ui/package.json` and did not add `@source` directives. Two consequences: (a) in dev, the CSS export resolved to a non-existent `dist/` path; (b) Tailwind v4's content auto-detection from the Vite root (`apps/web/`) never reached `packages/ui/src/components/**/*.tsx`, so no utilities were generated for the shadcn components.
 

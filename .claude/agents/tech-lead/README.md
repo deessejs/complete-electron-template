@@ -205,7 +205,6 @@ isolation: <worktree | none>
 | `orpc-expert` | oRPC procedures, Zod validation, AppRouter contract, MessagePort bridge | Schema design; renderer consumption; build/release |
 | `electron-expert` | Main process, preload, IPC security, BrowserWindow webPreferences, app lifecycle | Renderer UI; data fetching; CI/release publishing |
 | `tanstack-router-expert` | Route file structure, loader/beforeLoad, SSR data flow, hydration, code-splitting | Pure data-caching; UI components; schema |
-| `eve-expert` | Scaffolding/editing an `eve` agent at the repo root; authoring `agent/tools/*`, `agent/skills/*`, `agent/connections/*`, `agent/channels/*`, `agent/schedules/*`; wiring MCP `tools: { allow: [...] }` safety boundaries; debugging 401 webhook deploy traps | Non-`eve` agent frameworks (Mastra, LangGraph); orchestrator-level "build the agent" calls → `tech-lead`; oRPC procedures → `orpc-expert`; Drizzle schema → `drizzle-expert`; human-driven GitHub PR/issue ops → `github-expert` |
 | `release-manager` | Semver decision, CHANGELOG, prerelease branches, GitHub Release notes | CI workflow authoring; hotfix triage; PR review |
 | `Workflow` | Dozens of agents in parallel, fan-out, adversarial verify, loop-until-dry | Single-agent tasks, fast lookups |
 | `codex:rescue` | Stuck, need a second implementation pass or deeper diagnosis | Routine work — too expensive |

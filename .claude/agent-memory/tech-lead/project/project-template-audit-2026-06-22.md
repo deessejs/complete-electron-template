@@ -1,11 +1,11 @@
 ---
 name: project-template-audit-2026-06-22
-description: Senior architectural audit of complete-electron-template on 2026-06-22; full plan at docs/plans/template-audit-remediation.md with 3 critical + 5 major findings and a 6-PR migration sequencing.
+description: Senior architectural audit of complete-electron-template on 2026-06-22; 3 critical + 5 major findings and a 6-PR migration sequencing.
 metadata:
   type: project
 ---
 
-Senior architectural audit of the complete-electron-template repo was conducted on 2026-06-22 against branch `refactor/shadcn-monorepo-migration`. The full plan, with proposed fixes, sequencing, and acceptance criteria, lives at `docs/plans/template-audit-remediation.md`.
+Senior architectural audit of the complete-electron-template repo was conducted on 2026-06-22 against branch `refactor/shadcn-monorepo-migration`.
 
 **Why:** The audit was triggered by concerns about the migration branch's width (64 files, 3K deletions) and the inclusion of a build-script band-aid (`packages/ui/scripts/fix-imports.mjs`).
 
@@ -19,6 +19,6 @@ Senior architectural audit of the complete-electron-template repo was conducted 
 
 **Migration sequencing:** Split the 64-file branch into 6 PRs of ≤15 files each. PR #2 (shadcn extraction with tsconfig paths) carries the highest risk and is where the band-aid gets retired.
 
-**Out of scope for the audit:** `docs/learnings/eve/`, `docs/reports/eve/`, macOS/Linux desktop targets, TanStack Query adoption, full SSR migration, logging strategy.
+**Out of scope for the audit:** macOS/Linux desktop targets, TanStack Query adoption, full SSR migration, logging strategy.
 
 Related: [[project-db-refactor-state]], [[project-monorepo-structure]], [[feedback-quality-bar]], [[reference-orpc-bridge]].
