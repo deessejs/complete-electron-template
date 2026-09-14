@@ -13,14 +13,14 @@ A senior-grade Electron monorepo: type-safe IPC over MessagePort, a factory-patt
 |-------|--------------|----------------|
 | Desktop shell | Electron 35, electron-vite, electron-builder, frameless window with hidden title bar | One command boots dev, one command ships a signed-capable installer. |
 | Renderer | React 19.2, TanStack Router (file-based SPA, no SSR), TanStack Query 5, Tailwind v4 (CSS-first) | Modern React with type-safe routing, server-state caching, and a theme system that's two CSS variables away. |
-| IPC | oRPC over MessagePort — typed end-to-end contract, no `contextBridge` API surface | One source of truth for renderer ↔ main calls; types flow from server to client, no manual DTOs. |
+| IPC | oRPC over MessagePort, a typed end-to-end contract with no `contextBridge` API surface | One source of truth for renderer ↔ main calls; types flow from server to client, no manual DTOs. |
 | Database | Drizzle ORM + better-sqlite3 (WAL), factory `initDatabase()`, auto-migrations at boot | Testable, parallelizable, no global singleton; migrations apply before the window opens. |
 | Type safety | TypeScript ^6, zod ^4 validation at every boundary, shared `@electron-template/sdk` | Contract drift is a compile error, not a runtime crash. |
 | UI primitives | shadcn/ui (added via `pnpm ui:add`), Radix UI, lucide-react, sonner, recharts, date-fns | Bring only what you need; everything lives in `packages/ui`. |
 | i18n | i18next + react-i18next + browser language detection | Render-time locale switching, no async boot delay. |
 | Testing | Vitest 4, real SQLite fixtures in `packages/db` | Tests run with the production ORM, not an in-memory mock. |
 | Tooling | ESLint 10, Prettier, electron-rebuild for native modules | Lint and format are per-workspace, so failures localize. |
-| CI | 19 GitHub Actions workflows — one action per workflow, parallel matrix | When a pipeline fails, you know exactly which check failed. |
+| CI | 19 GitHub Actions workflows, one action per workflow, parallel matrix | When a pipeline fails, you know exactly which check failed. |
 
 ## Why This Template
 
@@ -30,7 +30,7 @@ A senior-grade Electron monorepo: type-safe IPC over MessagePort, a factory-patt
 - **`127.0.0.1`, not `localhost`.** Some corporate networks and DNS setups don't resolve `localhost` consistently. Using the literal IP sidesteps `ERR_CONNECTION_TIMED_OUT`.
 - **Auto-migrations at boot.** No separate `db:migrate` step to forget in deploy. `runMigrations(handle.db)` runs as part of app startup.
 - **One workflow per action.** 19 separate `.github/workflows/*.yml` files. Each runs on its own filter path; failures are easy to attribute.
-- **oRPC AppRouter contract.** A single `AppRouter` type in `packages/api` defines every server procedure. The renderer imports the inferred client type — drift is a compile error.
+- **oRPC AppRouter contract.** A single `AppRouter` type in `packages/api` defines every server procedure. The renderer imports the inferred client type, so drift is a compile error.
 
 ## Quick Start
 
@@ -38,7 +38,7 @@ A senior-grade Electron monorepo: type-safe IPC over MessagePort, a factory-patt
 
 - Node.js ≥ **22.13.0** (`engines.node` enforced in root `package.json`)
 - pnpm **9.15+** (`corepack enable` if not installed)
-- Windows 10/11 for current build target — other platforms are a config line away (see Deployment)
+- Windows 10/11 for the current build target (other platforms are a config line away, see Deployment)
 
 **Install and run**
 
@@ -114,19 +114,19 @@ Useful when iterating on UI without the Electron shell.
 | `pnpm --filter @electron-template/db build` | Compile + copy Drizzle migrations to `dist/drizzle` |
 | `pnpm --filter @electron-template/db db:generate` | Diff schema → write SQL migration |
 | `pnpm --filter @electron-template/db db:migrate` | Apply pending migrations |
-| `pnpm --filter @electron-template/db db:push` | Push schema directly (dev only — never in prod) |
+| `pnpm --filter @electron-template/db db:push` | Push schema directly (dev only, never in prod) |
 | `pnpm --filter @electron-template/db db:studio` | Open Drizzle Studio in the browser |
 | `pnpm --filter @electron-template/db test` | Vitest with real SQLite fixtures |
 
 ### `packages/api`, `packages/sdk`, `packages/ui`
 
-Each exposes `build`, `typecheck`, `lint`, and (where applicable) `test`. The `packages/sdk` `prepare` hook runs `build` automatically — the renderer can import its types as soon as `pnpm install` finishes.
+Each exposes `build`, `typecheck`, `lint`, and (where applicable) `test`. The `packages/sdk` `prepare` hook runs `build` automatically, so the renderer can import its types as soon as `pnpm install` finishes.
 
 ## Environment Variables
 
 **None.** This template requires no environment variables to run. The SQLite database file is created automatically at `<userData>/data/database.sqlite` (Windows: `%APPDATA%/Complete Electron Template/data/database.sqlite`). To override the path, see Customization.
 
-If you later add a remote service or secret, add a Zod-validated loader in `packages/api` and document it here — don't reach for `process.env` directly.
+If you later add a remote service or secret, add a Zod-validated loader in `packages/api` and document it here. Don't reach for `process.env` directly.
 
 ## Project Structure
 
@@ -165,7 +165,7 @@ complete-electron-template/
 
 ## Deployment
 
-**Currently ships Windows x64.** Other platforms are a config edit away — see the end of this section.
+**Currently ships Windows x64.** Other platforms are a config edit away, see the end of this section.
 
 ### Local release build
 
@@ -176,8 +176,8 @@ pnpm --filter desktop release
 
 Outputs land in `apps/desktop/release/`:
 
-- `Complete Electron Template-1.0.0.exe` — portable executable
-- `win-unpacked/` — unpacked application directory (run `Complete Electron Template.exe` inside)
+- `Complete Electron Template-1.0.0.exe`, a portable executable
+- `win-unpacked/`, an unpacked application directory (run `Complete Electron Template.exe` inside)
 
 The `electron-builder.json` target is currently `dir` with `arch: x64`. Switch to NSIS for a proper installer, or add `mac` / `linux` targets for cross-platform builds.
 
@@ -192,7 +192,7 @@ Edit `apps/desktop/electron-builder.json` to add targets:
 }
 ```
 
-Then run the corresponding `electron-builder` flag on the host OS that matches the target. Universal macOS binaries use `--mac universal`. Code signing and notarization are not configured by default — set them up before your first public release.
+Then run the corresponding `electron-builder` flag on the host OS that matches the target. Universal macOS binaries use `--mac universal`. Code signing and notarization are not configured by default. Set them up before your first public release.
 
 ### GitHub release flow
 
@@ -219,13 +219,13 @@ The `v*.*.*` tag triggers `.github/workflows/release-desktop.yml`, which builds 
 
 | What | Where | Default | When to change |
 |------|-------|---------|----------------|
-| `appId` | `apps/desktop/electron-builder.json` | `com.electron-template.app` | Before your first release — use your reverse-DNS bundle ID. Changing it after install is breaking (Windows treats it as a different app). |
+| `appId` | `apps/desktop/electron-builder.json` | `com.electron-template.app` | Before your first release. Use your reverse-DNS bundle ID. Changing it after install is breaking (Windows treats it as a different app). |
 | `productName` | `apps/desktop/electron-builder.json` | `Complete Electron Template` | Display name in the OS taskbar / dock / window list. |
 | `ALLOWED_ORIGIN` | `apps/desktop/src/preload/index.ts` | `http://127.0.0.1:5173` | Only if you change the renderer dev port. |
 | Database path | `apps/desktop/src/main/index.ts` | `<userData>/data` | Multi-user installs, portable mode, or CI fixtures. |
 | Renderer dev port | `apps/desktop/electron.vite.config.ts` (`server.port`) | `5173` | Only if 5173 is taken on your machine. |
 | Build target | `apps/desktop/electron-builder.json` (`win.target`, add `mac`, `linux`) | Windows `dir` x64 | Switch to NSIS for an installer; add macOS / Linux for cross-platform. |
-| shadcn components | `pnpm ui:add` | none by default | Add only what you need — they live in `packages/ui/src/components/`. |
+| shadcn components | `pnpm ui:add` | none by default | Add only what you need. They live in `packages/ui/src/components/`. |
 | CI matrix | `.github/workflows/` | 19 workflows | Add a new workflow per concern; never combine concerns in one file. |
 
 ## Architecture Notes
@@ -234,19 +234,19 @@ The `v*.*.*` tag triggers `.github/workflows/release-desktop.yml`, which builds 
 
 **Factory database, no env vars.** `initDatabase({ dataPath, backup })` returns a fresh `{ sqlite, db }` handle. No module-level mutable state, no `getDb()` singleton. Migrations run automatically via `runMigrations(handle.db)` at boot. Drizzle pragmas: `journal_mode = WAL`, `foreign_keys = ON`, `synchronous = NORMAL`, `busy_timeout = 5000`.
 
-**`127.0.0.1`, not `localhost`.** The renderer dev server, preload origin check, and CSP `connect-src` all bind or expect `127.0.0.1`. Some networks don't resolve `localhost` consistently — the literal IP avoids the timeout.
+**`127.0.0.1`, not `localhost`.** The renderer dev server, preload origin check, and CSP `connect-src` all bind or expect `127.0.0.1`. Some networks don't resolve `localhost` consistently, so the literal IP avoids the timeout.
 
 **oRPC AppRouter contract.** A single `AppRouter` type in `packages/api` defines every server procedure. The renderer imports the inferred client type once, so contract drift is a compile error. Zod schemas validate every input at the boundary.
 
 **One workflow per action.** 19 separate workflows: `build-{api,db,desktop,sdk,web}`, `lint-{api,db,desktop,sdk}` + `lint.yml` (web), `typecheck-{api,db,desktop,sdk}` + `typecheck.yml` (web), `test-{api,db,web}`, `release-desktop.yml`. Each runs on its own filter path; failures are easy to attribute and the matrix runs in parallel.
 
-**Vite version note.** `apps/web` is on Vite `^8.0.0` (Rolldown bundler). Some legacy Vite plugins may not be compatible yet — the path aliases in `electron.vite.config.ts` exist partly to work around Rolldown's stricter `exports` resolution.
+**Vite version note.** `apps/web` is on Vite `^8.0.0` (Rolldown bundler). Some legacy Vite plugins may not be compatible yet. The path aliases in `electron.vite.config.ts` exist partly to work around Rolldown's stricter `exports` resolution.
 
 **CSP.** A Content-Security-Policy is installed via `webRequest.onHeadersReceived`. Production blocks inline scripts; dev allows `unsafe-inline` + `ws://127.0.0.1:5173` for Vite HMR. This is the compensating control for `sandbox: false` on the BrowserWindow.
 
 ## Contributing
 
-This is a template, not a product — contributions should keep it boring infrastructure, not opinionated features.
+This is a template, not a product. Contributions should keep it boring infrastructure, not opinionated features.
 
 - Fork the repo, branch off `dev`.
 - Use conventional commits (`feat(electron): …`, `fix(db): …`, `docs(readme): …`).
@@ -255,4 +255,4 @@ This is a template, not a product — contributions should keep it boring infras
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE).
