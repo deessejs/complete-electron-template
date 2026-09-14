@@ -62,7 +62,7 @@ Full release plan: `docs/internal/product/releases/v2.0.0/RELEASES.md`
 - PR #2: SSR half-wiring resolved (C3)
 - PR #5: Node 22.13 across CI (M2)
 
-See `docs/plans/template-audit-remediation.md` §6.
+See the template audit migration sequencing in [[project-template-audit-2026-06-22]] §6.
 
 ## Related
 
