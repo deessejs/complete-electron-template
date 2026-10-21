@@ -1,5 +1,5 @@
 {
-  "name": "@electron-template/root",
+  "name": "complete-electron-template",
   "private": true,
   "type": "module",
   "workspaces": [
